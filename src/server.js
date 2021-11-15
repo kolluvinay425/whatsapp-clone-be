@@ -2,6 +2,7 @@ import express from "express";
 import list from "express-list-endpoints";
 import mongoose from "mongoose";
 import cors from "cors";
+import userRouter from "./users/index.js";
 import {
   unauthorizedHandler,
   forbiddenHandler,
@@ -15,7 +16,7 @@ const port = process.env.PORT | 3001;
 server.use(cors());
 server.use(express.json());
 // ******************** ROUTES ******************************
-
+server.use("/user", userRouter);
 // ********************** ERROR HANDLERS *************************
 server.use(unauthorizedHandler);
 server.use(forbiddenHandler);

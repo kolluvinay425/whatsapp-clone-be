@@ -1,13 +1,9 @@
 import mongoose from "mongoose";
-
+import bcrypt from "bcrypt";
 const { model, Schema } = mongoose;
 
 const userSchema = new Schema({
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  username: {
     type: String,
     required: true,
   },
@@ -27,4 +23,27 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.pre("save", async function () {
+  const newUser = this;
+  const plainPW = newUser.password;
+  if (newUser.isModified("password")) {
+    newUser.password = await bcrypt.hash(plainPW, 11);
+  }
+});
+userSchema.methods.toJSON = function () {
+  const userDocument = this;
+  const userObject = userDocument.toObject();
+  delete userObject.password;
+  delete userObject.__v;
+  return userObject;
+};
+userSchema.statics.checkCredentials = async function (email, plainPW) {
+  const user = await this.findOne({ email });
+  if (user) {
+    const isPwdMatch = await bcrypt.compare(plainPW, user.password);
+    if (isPwdMatch) return user;
+    else return null;
+  }
+  return null;
+};
 export default model("user", userSchema);
