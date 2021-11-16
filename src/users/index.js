@@ -25,7 +25,7 @@ userRouter.post("/login", async (req, res, next) => {
       res.send({ accessToken, refreshToken });
     } else {
       next(
-        createHttpError(401, "cridentials are not ok check again correctly")
+        createHttpError(401, "credentials are not ok check again correctly")
       );
     }
   } catch (error) {
