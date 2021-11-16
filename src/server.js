@@ -32,3 +32,5 @@ mongoose.connection.on("connected", () => {
     console.log(`server running on port ${port}`);
   });
 });
+
+export { server };
