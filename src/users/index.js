@@ -32,6 +32,16 @@ userRouter.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+userRouter.get("/me", JWtAuthenticateMiddle, async (req, res, next) => {
+  try {
+    const userData = req.user;
+    if (userData) {
+      res.send(userData);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 userRouter.put("/me", JWtAuthenticateMiddle, async (req, res, next) => {
   try {
     if (req.user) {
@@ -57,16 +67,7 @@ userRouter.get("/:userId", JWtAuthenticateMiddle, async (req, res, next) => {
     next(error);
   }
 });
-userRouter.get("/me", JWtAuthenticateMiddle, async (req, res, next) => {
-  try {
-    const userData = req.user;
-    if (userData) {
-      res.send(userData);
-    }
-  } catch (error) {
-    next(error);
-  }
-});
+
 userRouter.get("/", JWtAuthenticateMiddle, async (req, res, next) => {
   console.log("sdcsdcsdcds-----", req.user);
   try {
