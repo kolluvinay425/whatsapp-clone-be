@@ -1,4 +1,4 @@
-import { server } from "./server.js";
+import server from "./server.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 

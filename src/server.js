@@ -10,7 +10,7 @@ import {
 } from "./errorHandlers.js";
 const server = express();
 
-export const port = process.env.PORT | 3001;
+export const port = process.env.PORT || 3001;
 // ******************** MIDDLEWARES *************************+
 
 server.use(cors());
@@ -33,4 +33,4 @@ mongoose.connection.on("connected", () => {
   });
 });
 
-export { server };
+export default server;
