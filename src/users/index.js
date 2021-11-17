@@ -38,7 +38,7 @@ userRouter.get("/googleLogin", passport.authenticate("google", {scope:["profile"
 userRouter.get("/googleRedirect", passport.authenticate("google"), async (req, res, next) => {
     try {
         console.log("user",req.user)
-        res.send(req.user.tokens)
+        res.redirect("http://localhost:3000/main")
     } catch (error) {
         next(error); 
     }
