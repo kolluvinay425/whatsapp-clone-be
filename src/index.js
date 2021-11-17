@@ -1,4 +1,4 @@
-import { server } from "../../server.js";
+import { server } from "./server.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
@@ -27,6 +27,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// server.listen(port, () => {
-//   console.log(`running on ${port}`);
+// chatServer.listen(port, () => {
+//   console.log(`socket io running on ${port}`);
 // });

@@ -10,7 +10,7 @@ import {
 } from "./errorHandlers.js";
 const server = express();
 
-const port = process.env.PORT | 3001;
+export const port = process.env.PORT | 3001;
 // ******************** MIDDLEWARES *************************+
 
 server.use(cors());
