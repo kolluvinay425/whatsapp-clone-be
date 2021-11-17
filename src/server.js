@@ -1,4 +1,4 @@
-import express from "express";
+/*import express from "express";
 import list from "express-list-endpoints";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -23,4 +23,4 @@ mongoose.connection.on("connected", () => {
   server.listen(port, () => {
     console.log(`server running on port ${port}`);
   });
-});
+});*/
