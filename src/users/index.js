@@ -5,6 +5,7 @@ import JWtAuthenticateMiddle from "./authentication/jwt.js";
 import { JWtAuthenticate } from "./authentication/tools.js";
 import createHttpError from "http-errors";
 import passport from "passport";
+import {parseFile} from "./cloudinary.js"
 const userRouter = express.Router();
 
 //missing routes
