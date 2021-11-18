@@ -93,10 +93,7 @@ userRouter.post("/account", async (req, res, next) => {
 userRouter.post("/session", async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await userModel.checkCredentials(
-      req.body.email,
-      req.body.password
-    );
+    const user = await userModel.checkCredentials(email, password);
     if (user) {
       const { accessToken, refreshToken } = await JWtAuthenticate(user);
       res.send({ accessToken, refreshToken });
