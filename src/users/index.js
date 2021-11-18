@@ -2,7 +2,7 @@ import express from "express";
 import userModel from "./schema.js";
 import CreateHttpError from "http-errors";
 import JWtAuthenticateMiddle from "./authentication/jwt.js";
-import  {JWtAuthenticate}  from "./authentication/tools.js";
+import { JWtAuthenticate } from "./authentication/tools.js";
 import createHttpError from "http-errors";
 import passport from "passport";
 const userRouter = express.Router();
@@ -34,15 +34,22 @@ userRouter.post("/session", async (req, res, next) => {
   }
 });
 
-userRouter.get("/googleLogin", passport.authenticate("google", {scope:["profile", "email"]}))
-userRouter.get("/googleRedirect", passport.authenticate("google"), async (req, res, next) => {
+userRouter.get(
+  "/googleLogin",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+userRouter.get(
+  "/googleRedirect",
+  passport.authenticate("google"),
+  async (req, res, next) => {
     try {
-        console.log("user",req.user)
-        res.redirect("http://localhost:3000/main")
+      console.log("user", req.user);
+      res.redirect("http://localhost:3000/main");
     } catch (error) {
-        next(error); 
+      next(error);
     }
-})
+  }
+);
 
 userRouter.get("/me", JWtAuthenticateMiddle, async (req, res, next) => {
   try {
