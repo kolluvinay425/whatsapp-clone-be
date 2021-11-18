@@ -12,4 +12,4 @@ const MessageSchema = new Schema(
     }
 )
 
-export default model("chatHistory", MessageSchema);
+export default model("Message", MessageSchema);

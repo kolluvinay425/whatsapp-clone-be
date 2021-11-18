@@ -6,18 +6,16 @@ import mongoose from "mongoose";
 import ConversationModel from "./chats/chatModels/ConversationModel.js";
 import MessageModel from "./chats/chatModels/MessageModel.js";
 import userRouter from "./users/index.js";
-import list from "express-list-endpoints"
-
+import list from "express-list-endpoints";
 import passport from "passport";
 import googleStrategy from "./users/authentication/oauth.js";
-
 import {
   unauthorizedHandler,
   forbiddenHandler,
   catchAllHandler,
 } from "./errorHandlers.js";
 
-let onlineUsers = []
+let onlineUsers = [];
 
 const app = express();
 
@@ -29,24 +27,26 @@ app.use(passport.initialize());
 
 app.use("/user", userRouter);
 
-
-
 console.table(list(app));
 
 /* app.get('/online-users', (req, res) => {
     res.send({ onlineUsers })
 }) */
 
-app.get("/chat", (req, res, next) => {
-  ConversationModel.find((err, data) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(data);
-    }
-  });
-});
 
+// ---------------- CHAT ROUTES
+// app.get("/chat", (req, res, next) => {
+//   ConversationModel.find((err, data) => {
+//     if (err) {
+//       res.status(500).send(err);
+//     } else {
+//       res.status(200).send(data);
+//     }
+//   });
+// });
+
+
+// CREATE NEW CONVERSATION
 app.post("/chat", async (req, res, next) => {
   const newConversation = new ConversationModel({
     members: [req.body.senderId, req.body.receiverId],
@@ -59,6 +59,7 @@ app.post("/chat", async (req, res, next) => {
   }
 });
 
+// GET CONVERSATIONS OF USER
 app.get("/chat/:userId", async (req, res, next) => {
   try {
     const conversation = await ConversationModel.find({
@@ -70,6 +71,8 @@ app.get("/chat/:userId", async (req, res, next) => {
   }
 });
 
+
+// ---------------- MESSAGES ROUTES
 app.post("/messages", async (req, res, next) => {
   const newMessage = new MessageModel(req.body);
   try {
@@ -91,12 +94,13 @@ app.get("/messages/:conversationId", async (req, res, next) => {
   }
 });
 
-    app.use(unauthorizedHandler);
-    app.use(forbiddenHandler);
-    app.use(catchAllHandler);
+app.use(unauthorizedHandler);
+app.use(forbiddenHandler);
+app.use(catchAllHandler);
 
+
+// ---------------- SOCKET IO
 const httpServer = createServer(app);
-
 const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
