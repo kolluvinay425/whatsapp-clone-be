@@ -2,17 +2,32 @@
 import list from "express-list-endpoints";
 import mongoose from "mongoose";
 import cors from "cors";
+import userRouter from "./users/index.js";
 
+import passport from "passport";
+import googleStrategy from "./users/authentication/oauth.js";
+
+import {
+  unauthorizedHandler,
+  forbiddenHandler,
+  catchAllHandler,
+} from "./errorHandlers.js";
 const server = express();
 
-const port = process.env.PORT | 3001;
+export const port = process.env.PORT || 3001;
 // ******************** MIDDLEWARES *************************+
 
+// ******************** MIDDLEWARES *************************+
+passport.use("google", googleStrategy);
 server.use(cors());
 server.use(express.json());
+server.use(passport.initialize());
 // ******************** ROUTES ******************************
-
+server.use("/user", userRouter);
 // ********************** ERROR HANDLERS *************************
+server.use(unauthorizedHandler);
+server.use(forbiddenHandler);
+server.use(catchAllHandler);
 
 console.table(list(server));
 
@@ -23,4 +38,9 @@ mongoose.connection.on("connected", () => {
   server.listen(port, () => {
     console.log(`server running on port ${port}`);
   });
-});*/
+
+});
+export default server;
+*/
+
+
