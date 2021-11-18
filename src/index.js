@@ -6,13 +6,33 @@ import { Server } from "socket.io";
 import mongoose from "mongoose"
 import ConversationModel from "./chats/chatModels/ConversationModel.js";
 import MessageModel from "./chats/chatModels/MessageModel.js";
+import userRouter from "./users/index.js";
+import list from "express-list-endpoints"
+
+import passport from "passport";
+import googleStrategy from "./users/authentication/oauth.js";
+
+import {
+  unauthorizedHandler,
+  forbiddenHandler,
+  catchAllHandler,
+} from "./errorHandlers.js";
 
 let onlineUsers = []
 
 const app = express();
 
-app.use(cors())
-app.use(express.json())
+passport.use("google", googleStrategy);
+
+app.use(cors());
+app.use(express.json());
+app.use(passport.initialize());
+
+app.use("/user", userRouter);
+
+
+
+console.table(list(app));
 
 /* app.get('/online-users', (req, res) => {
     res.send({ onlineUsers })
@@ -76,6 +96,10 @@ app.get('/messages/:conversationId', async (req,res,next) => {
         res.status(500).send(error)
     }  
     })
+
+    app.use(unauthorizedHandler);
+    app.use(forbiddenHandler);
+    app.use(catchAllHandler);
 
 const httpServer = createServer(app);
 
