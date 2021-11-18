@@ -4,6 +4,9 @@ export const JWtAuthenticate = async (user) => {
 
   const accessToken = await generateJWT({ _id: user._id });
   const refreshToken = await generateRefreshJWT({ _id: user._id });
+  console.log("_id",{_id: user._id})
+  console.log("accessToken",accessToken)
+  console.log("refreshToken",refreshToken)
   return { accessToken, refreshToken };
 };
 

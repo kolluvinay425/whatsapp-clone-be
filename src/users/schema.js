@@ -13,7 +13,7 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function() {return !Boolean(this.googleId)},
   },
   avatar: {
     type: String,
@@ -25,6 +25,7 @@ const userSchema = new Schema({
   },
   googleId: {
     type: String,
+    required: function() {return !Boolean(this.password)}
   },
 });
 

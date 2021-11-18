@@ -3,6 +3,10 @@ import list from "express-list-endpoints";
 import mongoose from "mongoose";
 import cors from "cors";
 import userRouter from "./users/index.js";
+
+import passport from "passport";
+import googleStrategy from "./users/authentication/oauth.js";
+
 import {
   unauthorizedHandler,
   forbiddenHandler,
@@ -11,10 +15,15 @@ import {
 const server = express();
 
 export const port = process.env.PORT || 3001;
+
 // ******************** MIDDLEWARES *************************+
 
+
+// ******************** MIDDLEWARES *************************+
+passport.use("google", googleStrategy)
 server.use(cors());
 server.use(express.json());
+server.use(passport.initialize())
 // ******************** ROUTES ******************************
 server.use("/user", userRouter);
 // ********************** ERROR HANDLERS *************************
