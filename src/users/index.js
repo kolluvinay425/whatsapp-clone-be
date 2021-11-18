@@ -5,7 +5,7 @@ import JWtAuthenticateMiddle from "./authentication/jwt.js";
 import { JWtAuthenticate } from "./authentication/tools.js";
 import createHttpError from "http-errors";
 import passport from "passport";
-import {parseFile} from "./cloudinary.js"
+import { parseFile } from "./cloudinary.js";
 const userRouter = express.Router();
 
 //missing routes
@@ -57,8 +57,8 @@ userRouter.put(
       if (req.user) {
         const newUser = {
           ...req.user.toObject(),
-          username,
-          email,
+          username: req.body.username,
+          email: req.body.email,
           avatar: req.file?.path,
         };
         const user = await userModel.findByIdAndUpdate(req.user._id, newUser, {
