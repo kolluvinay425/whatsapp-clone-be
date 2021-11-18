@@ -2,8 +2,9 @@ import express from "express";
 import userModel from "./schema.js";
 import CreateHttpError from "http-errors";
 import JWtAuthenticateMiddle from "./authentication/jwt.js";
-import { JWtAuthenticate } from "./authentication/tools.js";
+import  {JWtAuthenticate}  from "./authentication/tools.js";
 import createHttpError from "http-errors";
+import passport from "passport";
 const userRouter = express.Router();
 
 userRouter.post("/account", async (req, res, next) => {
@@ -16,7 +17,7 @@ userRouter.post("/account", async (req, res, next) => {
     next(error);
   }
 });
-userRouter.post("/login", async (req, res, next) => {
+userRouter.post("/session", async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await userModel.checkCredentials(email, password);
@@ -25,8 +26,29 @@ userRouter.post("/login", async (req, res, next) => {
       res.send({ accessToken, refreshToken });
     } else {
       next(
-        createHttpError(401, "cridentials are not ok check again correctly")
+        createHttpError(401, "credentials are not ok check again correctly")
       );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+userRouter.get("/googleLogin", passport.authenticate("google", {scope:["profile", "email"]}))
+userRouter.get("/googleRedirect", passport.authenticate("google"), async (req, res, next) => {
+    try {
+        console.log("user",req.user)
+        res.redirect("http://localhost:3000/main")
+    } catch (error) {
+        next(error); 
+    }
+})
+
+userRouter.get("/me", JWtAuthenticateMiddle, async (req, res, next) => {
+  try {
+    const userData = req.user;
+    if (userData) {
+      res.send(userData);
     }
   } catch (error) {
     next(error);
@@ -57,16 +79,7 @@ userRouter.get("/:userId", JWtAuthenticateMiddle, async (req, res, next) => {
     next(error);
   }
 });
-userRouter.get("/me", JWtAuthenticateMiddle, async (req, res, next) => {
-  try {
-    const userData = req.user;
-    if (userData) {
-      res.send(userData);
-    }
-  } catch (error) {
-    next(error);
-  }
-});
+
 userRouter.get("/", JWtAuthenticateMiddle, async (req, res, next) => {
   console.log("sdcsdcsdcds-----", req.user);
   try {
