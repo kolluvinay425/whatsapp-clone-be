@@ -17,7 +17,7 @@ userRouter.post("/account", async (req, res, next) => {
     next(error);
   }
 });
-userRouter.post("/login", async (req, res, next) => {
+userRouter.post("/session", async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await userModel.checkCredentials(email, password);
