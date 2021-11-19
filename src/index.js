@@ -22,7 +22,7 @@ let onlineUsers = [];
 const app = express();
 
 passport.use("google", googleStrategy);
-const whiteList = ["http://localhost:3000" || process.env.FRONT_END_URL];
+const whiteList = [process.env.FRONT_END_URL];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
