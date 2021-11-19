@@ -22,8 +22,19 @@ let onlineUsers = [];
 const app = express();
 
 passport.use("google", googleStrategy);
-
-app.use(cors());
+const whiteList = ["http://localhost:3000" || process.env.FRONT_END_URL];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
+      callback(null, true);
+    } else {
+      const error = new Error("Not allowed by cors!");
+      error.status = 403;
+      callback(error);
+    }
+  },
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(passport.initialize());
 
